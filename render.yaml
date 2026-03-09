@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: tridentai-backend
+    env: docker
+    dockerContext: backend
+    dockerfilePath: backend/Dockerfile
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: tridentai-db
+          property: connectionString
+      - key: FRONTEND_URL
+        value: https://tridentai.space
+
+  - type: web
+    name: tridentai-frontend
+    env: docker
+    dockerContext: frontend
+    dockerfilePath: frontend/Dockerfile
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://tridentai-backend.onrender.com/api
+
+databases:
+  - name: tridentai-db
+    databaseName: tridentai
+    user: trident_user
+    plan: free
